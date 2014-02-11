@@ -1,6 +1,6 @@
 from django.conf import settings
 from django import forms
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMessage
 from django.core.exceptions import ImproperlyConfigured
 from django.template.loader import render_to_string
 
@@ -15,7 +15,7 @@ class ContactForm(forms.Form):
         Send contact form as an email to the address specified in the
         CONTACT_EMAILS setting.
         """
-        from_email = self.cleaned_data['email']
+        reply_email = self.cleaned_data['email']
         if not hasattr(settings, 'CONTACT_EMAILS'):
             raise ImproperlyConfigured("You need to specify CONTACT_EMAILS in "
                                        "your Django settings file.")
@@ -25,5 +25,10 @@ class ContactForm(forms.Form):
                                 'contact/email.txt')
         message = render_to_string(template_name, self.cleaned_data)
         
-        send_mail(subject, message, from_email, to_emails)
+        email = EmailMessage(subject=subject, body=message, to=to_emails,
+            headers = {'Reply-To': reply_email})
+            
+        email.send()
+        
+        #send_mail(subject, message, from_email, to_emails)
     
