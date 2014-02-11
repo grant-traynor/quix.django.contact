@@ -1,6 +1,3 @@
-import distribute_setup
-distribute_setup.use_setuptools()
-
 import os
 from setuptools import setup, find_packages
 
@@ -19,7 +16,6 @@ setup(
     url = "https://github.com/Quixotix/quix.django.contact",
     packages = find_packages(),
     namespace_packages = ["quix", "quix.django"],
-    py_modules = ['distribute_setup',],
     license = "New BSD License",
     classifiers = [
         "Development Status :: 5 - Production/Stable",
